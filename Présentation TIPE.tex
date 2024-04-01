@@ -1,0 +1,607 @@
+% Preamble
+\documentclass[t,10pt]{beamer}
+
+% Packages
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel}
+\usepackage{pslatex}
+\usepackage{romanbar}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+
+\usetheme{Warsaw}
+
+% Document
+\title{Le routage réseau des télécommunications mobiles }
+\subtitle{TIPE-2022/2023}
+\author{Florian Touraine -13175}
+\date{}
+
+\begin{document}
+    \maketitle
+
+    %Sommaire
+    \begin{frame}
+        \tableofcontents[]
+    \end{frame}
+
+    \section{Présentation du Sujet}
+    \subsection{Problématique et Motivations}
+    \begin{frame}\frametitle{\underline{Présentation du Sujet} \\ \small Problématique et Motivations}
+        \underline{Problématique:} \\
+        Comment router au mieux les chemins des communications entre antennes ?
+        \\
+        \vspace{0.5cm}
+        \underline{L'étude de ce problème est motivée par:}
+        \begin{enumerate}
+            \item La croissance de la population et donc des réseaux.
+            \item La volonté d'éviter les saturations et les surcharges du réseau.
+        \end{enumerate}
+    \end{frame}
+
+    \subsection{Exemple avec Paris}
+    \begin{frame}\frametitle{\small Représentation de Paris}
+        \underline{Répartition des antennes dans la ville de Paris:}
+        \begin{enumerate}
+            \item Nombre d'Antennes : 1000
+            \item Rayon de Paris : 10 km
+        \end{enumerate}
+        \includegraphics[scale=0.5]{Image antennes de Paris}
+    \end{frame}
+
+    \subsection{Exemple à 9 antennes}
+    \begin{frame}\frametitle{\small Exemple à 9 antennes}
+        \underline{On declare le type antennes:}
+        \\
+        \vspace{0.1cm}
+         \includegraphics[scale=0.4]{Image classe}
+        \\
+        \underline{on se donne les 9 antennes selon ce type:}
+        \\
+        \vspace{0.1cm}
+        \includegraphics[scale=0.4]{Image antennes}
+    \end{frame}
+
+    \begin{frame}
+        \includegraphics[scale=0.6]{Image à 9 antennes}
+    \end{frame}
+
+    \begin{frame}
+        \includegraphics[scale=0.6]{Image à 9 antennes reliées}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{1.42cm}
+        \begin{tikzpicture}
+            \path
+            (0,0) node[draw,shape=circle](0){0}
+            (1,1) node[draw,shape=circle](1){1}
+            (1,-1) node[draw,shape=circle](2){2}
+            (-1,-1) node[draw,shape=circle](3){3}
+            (-1,1) node[draw,shape=circle](4){4}
+            (2,0) node[draw,shape=circle](5){5}
+            (0,-2) node[draw,shape=circle](6){6}
+            (-2,0) node[draw,shape=circle](7){7}
+            (0,2) node[draw,shape=circle](8){8}
+            \footnotesize
+            \draw(8)--(1)node[midway,above,sloped]{$1000$};
+            \draw(8)--(4)node[midway,above,sloped]{$1000$};
+            \draw(4)--(0)node[midway,above,sloped]{$100$};
+            \draw(1)--(0)node[midway,above,sloped]{$100$};
+            \draw(4)--(7)node[midway,above,sloped]{$1000$};
+            \draw(1)--(5)node[midway,above,sloped]{$100$};
+            \draw(7)--(3)node[midway,above,sloped]{$100$};
+            \draw(0)--(3)node[midway,above,sloped]{$100$};
+            \draw(0)--(2)node[midway,above,sloped]{$100$};
+            \draw(5)--(2)node[midway,above,sloped]{$100$};
+            \draw(3)--(6)node[midway,above,sloped]{$100$};
+            \draw(2)--(6)node[midway,above,sloped]{$10000$};
+        \end{tikzpicture}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{1cm}
+    \begin{minipage}{0.48\linewidth}
+        \begin{tikzpicture}
+            \path
+            (0,2.5) node(nb){1}
+            (0,-2.5) node(nb2){1}
+            (0,0) node[draw,shape=circle](0){0}
+            (1,1) node[draw,shape=circle](1){1}
+            (1,-1) node[draw,shape=circle](2){2}
+            (-1,-1) node[draw,shape=circle](3){3}
+            (-1,1) node[draw,shape=circle](4){4}
+            (2,0) node[draw,shape=circle](5){5}
+            (0,-2) node[draw,shape=circle](6){6}
+            (-2,0) node[draw,shape=circle](7){7}
+            (0,2) node[draw,shape=circle](8){8}
+            \footnotesize
+            \draw(8)--(1)node[midway,above,sloped]{$900$};
+            \draw[red, <->, =>latex](8)--(4)node[midway,above,sloped]{$900$};
+            \draw(4)--(0)node[midway,above,sloped]{$0$};
+            \draw(1)--(0)node[midway,above,sloped]{$100$};
+            \draw[red, <->, =>latex](4)--(7)node[midway,above,sloped]{$900$};
+            \draw(1)--(5)node[midway,above,sloped]{$100$};
+            \draw[red, <->, =>latex](7)--(3)node[midway,above,sloped]{$0$};
+            \draw(0)--(3)node[midway,above,sloped]{$0$};
+            \draw(0)--(2)node[midway,above,sloped]{$100$};
+            \draw(5)--(2)node[midway,above,sloped]{$100$};
+            \draw[red, <->, =>latex](3)--(6)node[midway,above,sloped]{$0$};
+            \draw(2)--(6)node[midway,above,sloped]{$10000$};
+        \end{tikzpicture}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\linewidth}
+        \begin{enumerate}
+            \item Une personne située au sommet 8 communique avec une autre au sommet 6.
+            \item Elle utilise la totalité de la bande passante disponible sur le chemin (100) (= bonne communication).
+            \item Elle passe par le sommet 4 et utilise la totalité de sa bande passante
+            donc l'arrete 4 -> 0 est elle aussi diminuée.
+        \end{enumerate}
+    \end{minipage}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{1cm}
+    \begin{minipage}{0.48\linewidth}
+        \begin{tikzpicture}
+            \path
+            (0,2.5) node(nb){4}
+            (0,-2.5) node(nb2){4}
+            (0,0) node[draw,shape=circle](0){0}
+            (1,1) node[draw,shape=circle](1){1}
+            (1,-1) node[draw,shape=circle](2){2}
+            (-1,-1) node[draw,shape=circle](3){3}
+            (-1,1) node[draw,shape=circle](4){4}
+            (2,0) node[draw,shape=circle](5){5}
+            (0,-2) node[draw,shape=circle](6){6}
+            (-2,0) node[draw,shape=circle](7){7}
+            (0,2) node[draw,shape=circle](8){8}
+            \footnotesize
+            \draw(8)--(1)node[midway,above,sloped]{$900$};
+            \draw[red, <->, =>latex](8)--(4)node[midway,above,sloped]{$900$};
+            \draw(4)--(0)node[midway,above,sloped]{$0$};
+            \draw(1)--(0)node[midway,above,sloped]{$100$};
+            \draw[red, <->, =>latex](4)--(7)node[midway,above,sloped]{$900$};
+            \draw(1)--(5)node[midway,above,sloped]{$100$};
+            \draw[red, <->, =>latex](7)--(3)node[midway,above,sloped]{$0$};
+            \draw(0)--(3)node[midway,above,sloped]{$0$};
+            \draw(0)--(2)node[midway,above,sloped]{$100$};
+            \draw(5)--(2)node[midway,above,sloped]{$100$};
+            \draw[red, <->, =>latex](3)--(6)node[midway,above,sloped]{$0$};
+            \draw(2)--(6)node[midway,above,sloped]{$10000$};
+        \end{tikzpicture}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\linewidth}
+        \begin{enumerate}
+            \item Quatre personnes situées au sommet 8 communique avec quatre autre au sommet 6.
+            \item Elles se repartissent la bande passante équitablement (25 par personnes).
+            \item Mauvaise communication et mauvaise répartition.
+        \end{enumerate}
+    \end{minipage}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{1cm}
+    \begin{minipage}{0.48\linewidth}
+        \begin{tikzpicture}
+            \path
+            (0,2.5) node(nb){4}
+            (0,-2.5) node(nb2){4}
+            (0,0) node[draw,shape=circle](0){0}
+            (1,1) node[draw,shape=circle](1){1}
+            (1,-1) node[draw,shape=circle](2){2}
+            (-1,-1) node[draw,shape=circle](3){3}
+            (-1,1) node[draw,shape=circle](4){4}
+            (2,0) node[draw,shape=circle](5){5}
+            (0,-2) node[draw,shape=circle](6){6}
+            (-2,0) node[draw,shape=circle](7){7}
+            (0,2) node[draw,shape=circle](8){8}
+            \footnotesize
+            \draw[blue, <->, =>latex](8)--(1)node[midway,above,sloped]{$800$};
+            \draw[red, <->, =>latex](8)--(4)node[midway,above,sloped]{$800$};
+            \draw[brown, <->, =>latex](4)--(0)node[midway,above,sloped]{$0$};
+            \draw[orange, <->, =>latex](1)--(0)node[midway,above,sloped]{$0$};
+            \draw[red, <->, =>latex](4)--(7)node[midway,above,sloped]{$900$};
+            \draw[blue, <->, =>latex](1)--(5)node[midway,above,sloped]{$900$};
+            \draw[red, <->, =>latex](7)--(3)node[midway,above,sloped]{$0$};
+            \draw[brown, <->, =>latex](0)--(3)node[midway,above,sloped]{$0$};
+            \draw[orange, <->, =>latex](0)--(2)node[midway,above,sloped]{$0$};
+            \draw[blue, <->, =>latex](5)--(2)node[midway,above,sloped]{$900$};
+            \draw[red, <->, =>latex](3)--(6)node[midway,above,sloped]{$0$};
+            \draw[blue, <->, =>latex](2)--(6)node[midway,above,sloped]{$9900$};
+        \end{tikzpicture}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\linewidth}
+        \begin{enumerate}
+            \item Les chemins sont mieux répartis.
+            \item Pour chaque utilisateur, 50 de bande passante leur est alloué.
+        \end{enumerate}
+    \end{minipage}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{1cm}
+        \begin{minipage}{0.48\linewidth}
+            \begin{tikzpicture}
+                \path
+                (0,2.5) node(nb){4}
+                (0,-2.5) node(nb2){4}
+                (0,0) node[draw,shape=circle](0){0}
+                (1,1) node[draw,shape=circle](1){1}
+                (1,-1) node[draw,shape=circle](2){2}
+                (-1,-1) node[draw,shape=circle](3){3}
+                (-1,1) node[draw,shape=circle](4){4}
+                (2,0) node[draw,shape=circle](5){5}
+                (0,-2) node[draw,shape=circle](6){6}
+                (-2,0) node[draw,shape=circle](7){7}
+                (0,2) node[draw,shape=circle](8){8}
+                \footnotesize
+                \draw(8)--(1)node[midway,above,sloped]{$100$};
+                \draw(8)--(4)node[midway,above,sloped]{$100$};
+                \draw(4)--(0)node[midway,above,sloped]{$50$};
+                \draw(1)--(0)node[midway,above,sloped]{$50$};
+                \draw(4)--(7)node[midway,above,sloped]{$50$};
+                \draw(1)--(5)node[midway,above,sloped]{$50$};
+                \draw(7)--(3)node[midway,above,sloped]{$50$};
+                \draw(0)--(3)node[midway,above,sloped]{$50$};
+                \draw(0)--(2)node[midway,above,sloped]{$50$};
+                \draw(5)--(2)node[midway,above,sloped]{$50$};
+                \draw(3)--(6)node[midway,above,sloped]{$100$};
+                \draw(2)--(6)node[midway,above,sloped]{$100$};
+            \end{tikzpicture}
+        \end{minipage}
+        \hfill
+        \begin{minipage}{0.48\linewidth}
+            \begin{enumerate}
+                \item Représentation en bande passante.
+            \end{enumerate}
+        \end{minipage}
+    \end{frame}
+
+    \section{Résolution par l'étude des Multiflots}
+    \subsection{Quelques Définitions}
+    \begin{frame}\frametitle{\underline{Résolution par l'étude des Multiflots} \\ \small Quelques Définitions}
+        \textbf{Définition 1:} Un flot représente l’acheminement d’un flux de matière depuis une source s vers une destination t.
+        \\
+    \vspace{2cm}
+        \textbf{Définition 2:} Un multiflot consiste à faire cohabiter plusieurs flots sur le réseau de sorte que
+        la somme des flots passant sur un arc soit inférieure à la capacité.
+    \end{frame}
+
+    \subsection{Problème de Multiflot Maximal}
+    \begin{frame}\frametitle{\small Problème de Multiflot Maximal}
+        On se munit ici d'un graphe $G(X,U)$ avec les sommets de $X$ numérotés de 1 à $n$.
+        \\
+        Dans $G$ un flot est définie par $\phi = (\phi_{1,2}, \phi_{2,3},..,\phi_{h-1,h}) \in \mathbb{R}^n$
+        \\
+        On pose A la matrice d'incidence Sommet-Arc.
+        \\
+        \vspace{0.5cm}
+        \underline{Exemple:}
+        $A = \[\left (
+        \begin{array}{cccc}
+            0 & 1 & 1 & 0 \\
+            1 & 0 & 1 & 0 \\
+            1 & 1 & 0 & 1 \\
+            0 & 0 & 1 & 0 \\
+        \end{array}
+        \right )\]$.
+        \\
+        \vspace{0.5cm}
+        On pose $p$ le nombre de flots distincts à router sur le graphe $G$.
+        \\
+        On pose aussi pour tout k appartenant à $[1,p]$, $\phi_{i,j}^{k}$ la quantité de flux qui passe sur l'arc (i,j)
+        pour le flot k.
+    \end{frame}
+
+    \begin{frame}
+        Ainsi le problème de Multiflot Maximal dont l'idée revient à trouver une distribution des flots qui maximise leur somme.
+        C'est à dire à maximiser $Z = z^{1} + \cdot \cdot \cdot + z^{p}$. En maximisant cette quantité,
+        on approche une solution convenable de la répartition des flux.
+        \\
+        Donc:
+        \\
+        \vspace{0,5cm}
+        $(MM)
+        \left\{
+        \begin{array}{ll}
+            \max(Z = z^{1} + \dots + z^{p}) \\
+            \text{Sous les contraintes:} \\
+            \forall k \in [1,p], A \cdot \phi^k = z^k \cdot b^k \\
+            \forall (i,j) \in U, \displaystyle \sum_{k=0}^{p} \phi_{i,j}^{k} \le c_{i,j} \\
+        \end{array}$
+        \\
+        \vspace{0.5cm}
+
+        Cependant il est assez difficile de trouver une solution de (MM).
+        Garg, vazirani et Yannakakison ont proposé un algorithme donnant une solution approchée à ce problème.\\
+        Mais n'ayant rien trouvé dessus, on va donc s'intéresser à la compatibilité d'une solution donnée.
+    \end{frame}
+
+    \subsection{Problème de Multiflot Compatible}
+    \begin{frame}\frametitle{\small Problème de Multiflot Compatible}
+        La demande à satisfaire pour chaque flot et à présent une donnée fixée,
+        cela correspond à la bande passante garantissant une bonne communication entre deux personnes. \\
+        On pose alors, pour tout $k$ appartenant à $[1,p]$, $d^{k}$ la demande à satisfaire pour le couple $(s_{k}, t_{k})$. \\
+        Ainsi vérifier si une distribution est compatible revient à vérifier: \\
+        \vspace{0.3cm}
+         $(MC)
+        \left\{
+        \begin{array}{ll}
+            \forall k \in [1,p], A \cdot \phi^k = d^k \cdot b^k \\
+            \forall (i,j) \in U, \displaystyle \sum_{k=0}^{p} \phi_{i,j}^{k} \le c_{i,j} \\
+        \end{array}$
+    \end{frame}
+
+    \section{Etude du problème de Multiflot compatible}
+
+    \subsection{Algorithme de sous gradient}
+    \begin{frame}\frametitle{\underline{Etude du problème de Multiflot compatible} \\ \small Algorithme de sous gradient}
+        \begin{enumerate}
+            \item Choisir une solution de départ $\pi^{0}$. Exemple : \vspace{0.2cm} $\pi^{0} = \frac{1}{n} (1,1,\dots,1)$
+            \item Répéter tant que condition d'arret non vérifié:
+            \begin{enumerate}
+                \item À l’étape courante t, $\pi^{t}$ est la solution courante. Déterminer le vecteur
+                $R^{\sigma_{*}}$ défini par: \vspace{0.2cm} $\pi^{t} \cdot R^{\sigma_{*}}
+                = \displaystyle \min_{\sigma \in \mathbb{R}} \left\{\pi^{t} \cdot R^{\sigma} \right\}$
+                \item Si $L(\pi^{t}) \ge 0$ alors aucune solution n'est admissible.
+                \item Sinon calculer $D^{t} = R^{\sigma_{*}} - c$, un sous gradient de $L$ en $\pi^{t}$, puis $\pi^{t+1}$,
+                projection de $\lambda_{t}D^{t}$ sur S
+                 \item $t \leftarrow t+1$
+            \end{enumerate}
+        \end{enumerate}
+    \end{frame}
+
+    \subsection{Quelques résultats}
+    \begin{frame}\frametitle{\small Quelques résultats}
+        \vspace{2cm}
+        \begin{enumerate}
+            \item Le programme dans le cas d'existence tourne en boucle infini
+            \item Le programme converge vers un optimum du simplexe dans le cas d'existence d'une distribution compatible
+        \end{enumerate}
+    \end{frame}
+
+    \begin{frame}
+        \begin{minipage}{0.48\linewidth}
+        \vspace{1.4cm}
+        \begin{tikzpicture}
+            \path
+            (0,0) node[draw,shape=circle](0){0}
+            (1,1) node[draw,shape=circle](1){1}
+            (1,-1) node[draw,shape=circle](2){2}
+            (-1,-1) node[draw,shape=circle](3){3}
+            (-1,1) node[draw,shape=circle](4){4}
+            (2,0) node[draw,shape=circle](5){5}
+            (0,-2) node[draw,shape=circle](6){6}
+            (-2,0) node[draw,shape=circle](7){7}
+            (0,2) node[draw,shape=circle](8){8}
+            \footnotesize
+            \draw(8)--(1)node[midway,above,sloped]{$1000$};
+            \draw(8)--(4)node[midway,above,sloped]{$1000$};
+            \draw(4)--(0)node[midway,above,sloped]{$100$};
+            \draw(1)--(0)node[midway,above,sloped]{$100$};
+            \draw(4)--(7)node[midway,above,sloped]{$1000$};
+            \draw(1)--(5)node[midway,above,sloped]{$100$};
+            \draw(7)--(3)node[midway,above,sloped]{$100$};
+            \draw(0)--(3)node[midway,above,sloped]{$100$};
+            \draw(0)--(2)node[midway,above,sloped]{$100$};
+            \draw(5)--(2)node[midway,above,sloped]{$100$};
+            \draw(3)--(6)node[midway,above,sloped]{$100$};
+            \draw(2)--(6)node[midway,above,sloped]{$10000$};
+        \end{tikzpicture}
+        \end{minipage}
+        \hfill
+        \begin{minipage}{0.48\linewidth}
+            \begin{enumerate}
+                \item On reprend cet exemple à 9 antennes pour tester l'algorithme
+            \end{enumerate}
+        \end{minipage}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{0.5cm}
+        \includegraphics[scale = 0.4]{Pas de solutions}
+        \vspace{0.5cm}
+        \begin{enumerate}
+            \item Pour cette demande de communication  et en fixant la bande passante pour chacun à 20, on a pas de solution
+        \end{enumerate}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{0.5cm}
+        \includegraphics[scale = 0.4]{Solution -25}
+        \vspace{0.5cm}
+        \begin{enumerate}
+            \item Pour cette demande de communication  et en fixant la bande passante pour chacun à 15, on a une solution admissible
+        \end{enumerate}
+    \end{frame}
+
+    \begin{frame}
+        \vspace{0.5cm}
+        \includegraphics[scale = 0.4]{Solution -10}
+        \vspace{0.5cm}
+        \begin{enumerate}
+            \item Pour cette demande de communication  et en fixant la bande passante pour chacun à 15, on a encore une solution admissible
+            \item L'optimum de la fonction L est plus proche de 0
+        \end{enumerate}
+    \end{frame}
+
+    \begin{frame}
+
+    \end{frame}
+
+    \section{Annexe}
+
+    \subsection{Formulation arcs-chemins du problème de Multiflot}
+    \begin{frame}\frametitle{\underline{Annexe} \\ \small Formulation arcs-chemins du problème de Multiflot}
+        On peut decomposer chacun des flots $\phi^{k}$ en somme de flots élémentaires s'écoulant sur
+        des chemins élémentaires entre $s_{k}$ et $t_{k}$.
+        \\
+        On pose $p(k)$ le nombre de chemins élémentaires distincts entre $s_{k}$ et $t_{k}$ dans $G$,
+        et pour $j = 1,\dots \dots,p(k)$, notons $Q^{k}_{j}$ le j-ième chemin de la liste.
+        \\
+        On definie le vecteur caractéristique de $Q^{k}_{j}$ par:
+        \\
+        \vspace{0.2cm}
+        $(p_{j}^{k})_{u} = +1$ Si $u \in Q^{k}_{j}$ \\
+        $(p_{j}^{k})_{u} = O$ Sinon.
+        \\
+        \vspace{0.2cm}
+        Enfin on définie $x_{j}^{k}$ (prenant comme valeur $0$ ou $d^{k}$),
+        la quantité de flot $k$ circulant sur la chemin $Q^{k}_{j}$.
+    \end{frame}
+
+    \begin{frame}
+        Avec cette formulation, le problème de Multiflots compatible devient:
+        \\
+        \vspace{1cm}
+        \centering
+         $(MC')
+        \left\{
+        \begin{array}{ll}
+            \text{Trouver les variables} \hspace{0.1cm} x_{j}^{k} \\
+            \text{Vérifiant:} \\
+            \forall k \in [1, p], \displaystyle \sum_{j=0}^{p(k)} x_{j}^{k} \ge d^{k} \\
+            \displaystyle \sum_{k=0}^{p} \displaystyle \sum_{j=0}^{p(k)} p_{j}^{k} \cdot x_{j}^{k} \le c \hspace{2cm}
+             C = (c_{1}, \dots, c_{n})^{T}
+        \end{array}$
+    \end{frame}
+
+    \subsection{Condition d'existence d'une solution}
+    \begin{frame} \frametitle{\small Condition d'existence d'une solution}
+        on ré-ecrit $(MC')$ par : \\
+        \vspace{0.4cm}
+         $(MC')
+        \left\{
+        \begin{array}{ll}
+            \text{Trouver les variables} \hspace{0.1cm} x_{j}^{k} \\
+            \text{Vérifiant:} \\
+            \forall k \in [1, p], - \displaystyle \sum_{j=0}^{p(k)} x_{j}^{k} \le - d^{k} \hspace{1cm} (3.1) \\
+            \displaystyle \sum_{k=0}^{p} \displaystyle \sum_{j=0}^{p(k)} p_{j}^{k} \cdot x_{j}^{k} \le c \hspace{2cm} (3.2)
+        \end{array}$
+    \end{frame}
+    
+    \begin{frame}
+        \underline{Lemme de Farkas et Minkowski:} \\
+        Soit $A$ une matrice réelle $(m \cdot n)$ et $b$ $m$-vecteur.
+        Le système d’inéquations linéaires : $Ax \le b$ a une solution non négative $(x \ge 0)$ si et seulement si : \\
+        \vspace{0.2cm}
+        \centering
+        \boxed{$\forall y \in \mathbb{R}^{m}, y^{T} \cdot A \ge 0 \Rightarrow y^{T} \cdot b \ge 0$}
+        \\
+        \vspace{1cm}
+        \begin{itemize}
+            \item Associons $\pi_{u} \ge 0$ un multiplicateur de la contrainte $(3.1)$
+            \item Associons $\mu^{k} \ge 0$ un multiplicateur de la contrainte $(3.2)$
+            \item $\forall k \in [1,p], P^{k} = (  p_{1}^{k},...,p_{p(k)}^{k})$
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        Grace au lemme de Farkas et Minkowski on a: \\
+        \vspace{0.2cm}
+        \boxed{
+        Conditions
+        $(C)
+        \left\{
+        \begin{array}{ll}
+            \forall \pi \ge 0, \forall \mu \ge 0 \\
+            \forall k \in [1, p], \pi \cdot P^{k} - \mu^{k} \ge 0 \Rightarrow \pi - \mu \cdot d \ge 0
+        \end{array}$}
+        \\
+        \vspace{0.2cm}
+        On observe que: \\
+        \vspace{0.2cm}
+        $\forall k \in [1, p], \pi \cdot P^{k} - \mu^{k} \ge 0
+        \Rightarrow \mu^{k} \le \displaystyle \min_{1 \le j \le P(k)} \pi \cdot P_{j}^{k}$
+        \\
+        \vspace{0.2cm}
+        Ainsi pour verifier (C), il faut et suffit que:
+        \boxed{$\mu^{k} = \displaystyle \min_{1 \le j \le P(k)} \pi \cdot P_{j}^{k}$} \\
+        \vspace{0.1cm}
+        (Plus court chemin au sens de $\pi$ entre $s_{k}$ et $t_{k}$)
+        \vspace{0.1cm}
+        \\
+        \underline{\bold{Théorème d'éxistence:}} \\
+        une condition nécessaire et suffisante pour qu’il existe un multiflot compatible est que : \\
+        $\forall \pi = (\pi_{1}, \pi_{2},\dots, \pi_{n})$: \\
+        \centering
+        \boxed{$\mu \cdot d \le \pi \cdot c$} \hspace{0.4cm} Avec $\mu = (\mu^{1},\dots, \mu^{p})$
+    \end{frame}
+
+    \begin{frame}
+        \begin{itemize}
+            \item On normalise le vecteur $\pi$
+            \item On Recherche le maximum $L^{*}$ de la fonction $L(\pi)=\mu - \pi c$
+            \item D'après le théoreme précédent:
+            \begin{itemize}
+                \item Si $L^{*} \le 0$ alors il existe une solution au problème
+                \item Si $L^{*} \ge 0$ alors il n'éxiste pas de solution
+            \end{itemize}
+        \end{itemize}
+        \underline{Definition:} \\
+        Un routage est une application σ de l’ensemble des flots dans l’ensemble des chemins. \\
+        Étant donné un routage σ, on appelle vecteur associé à $\sigma$ le vecteur : \\
+        \\
+        \centering
+        $R^{\sigma} = \displaystyle \sum_{k=1}^{p} P_{\sigma(k)}^{k} \cdot d^{k}$
+    \end{frame}
+
+    \begin{frame}
+        On considere le routage particulier $\sigma_{\pi}$ défini par: \\
+        \vspace{0.2cm}
+        \boxed{$\pi \cdot P_{\sigma_{\pi}(k)}^{k} = \displaystyle \min_{j = 1, \dots, p(k)} \pi \cdot P_{j}^{k}
+        = \displaystyle \min_{\sigma} \pi \cdot P_{\sigma(k)}^{k}$}
+        \vspace{1cm}
+        \\
+        La valeur de la fonction $L$ au point $\pi$ est alors :
+        \\
+        \vspace{0.2cm}
+        \centering
+        \boxed{$L(\pi) = \displaystyle \sum_{k=1}^{p} \mu^{k} \cdot d^{k} - \pi \cdot c =
+        \displaystyle \sum_{k=1}^{p} \mu^{k} \cdot P_{\sigma_{\pi}(k)}^{k} - \pi \cdot c$}
+        \\
+        \vspace{0.5cm}
+        D'ou:
+        \\
+        \vspace{0.5cm}
+        \boxed{$L(\pi) = \pi \cdot (R^{\sigma_{\pi}} - c) = \displaystyle \min_{\sigma \in R} (R^{\sigma} - c)$}
+    \end{frame}
+
+    \begin{frame}
+        Cette dernière expression montre que $L(\pi)$ est une fonction définie sur le simplexe:
+        $S = \left\{ \pi | \pi \ge 0 \right\}$
+    \end{frame}
+
+    \subsection{Algorithme}
+
+    \begin{frame}\frametitle{\small Algorithme}
+        \includegraphics[scale=0.35]{algo 1}
+    \end{frame}
+
+    \begin{frame}
+        \includegraphics[scale=0.35]{algo 2}
+    \end{frame}
+
+    \begin{frame}
+        \includegraphics[scale=0.35]{algo 3}
+    \end{frame}
+
+    \begin{frame}
+        \includegraphics[scale=0.35]{algo 4}
+    \end{frame}
+
+    \begin{frame}
+        \includegraphics[scale=0.35]{algo 5}
+    \end{frame}
+
+    \begin{frame}
+        \includegraphics[scale=0.35]{algo 6}
+    \end{frame}
+
+\end{document}
